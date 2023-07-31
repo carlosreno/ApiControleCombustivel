@@ -6,22 +6,26 @@ CREATE TABLE IF NOT EXISTS company (
      phone VARCHAR(20),
      email VARCHAR(100)
 );
+CREATE TABLE IF NOT EXISTS type_vehicles(
+                                            id INT AUTO_INCREMENT PRIMARY KEY ,
+                                            name VARCHAR(150) NOT NULL UNIQUE
+);
 CREATE TABLE IF NOT EXISTS cars (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    renavam VARCHAR(11) NOT NULL,
-    placa VARCHAR(100) NOT NULL,
-    type VARCHAR(50),
-    marca VARCHAR(50),
-    brand VARCHAR(50),
-    year INT,
-    color VARCHAR(30),
-    fuel VARCHAR(30),
-    mileage DOUBLE,
-    fabrication_date DATE,
-    comments TEXT,
-    company_id INT,
-    active_availability_id INT,
-    status ENUM('active','disabled')
+                                    id INT AUTO_INCREMENT PRIMARY KEY,
+                                    renavam VARCHAR(11) NOT NULL,
+                                    placa VARCHAR(100) NOT NULL,
+                                    marca VARCHAR(50),
+                                    brand VARCHAR(50),
+                                    year INT,
+                                    color VARCHAR(30),
+                                    fuel VARCHAR(30),
+                                    mileage DOUBLE,
+                                    fabrication_date DATE,
+                                    type_vehicles_id INT NOT NULL ,
+                                    comments TEXT,
+                                    company_id INT,
+                                    active_availability_id INT,
+                                    status ENUM('active','disabled')
 );
 
 CREATE TABLE IF NOT EXISTS sector (
@@ -102,10 +106,13 @@ CREATE TABLE IF NOT EXISTS fueling (
 
 ALTER TABLE cars
     ADD CONSTRAINT fk_activate_availability_id
-    FOREIGN KEY (active_availability_id) references availability(id),
+        FOREIGN KEY (active_availability_id) references availability(id),
+
+    ADD CONSTRAINT fk_type_vehicles_id
+        FOREIGN KEY (type_vehicles_id) references type_vehicles(id),
 
     ADD CONSTRAINT fk1_company_id
-    FOREIGN KEY (company_id) references company(id);
+        FOREIGN KEY (company_id) references company(id);
 
 
 ALTER TABLE contract

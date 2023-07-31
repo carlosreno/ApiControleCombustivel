@@ -14,3 +14,8 @@ SELECT 'davi', 1, 1 UNION
 SELECT 'vivi', 1, 2 UNION
 SELECT 'pingo', 1, 3
 WHERE NOT EXISTS (SELECT 1 FROM flyway_schema_history WHERE version = '2.0.0');
+
+INSERT INTO type_vehicles(id, name) (
+    SELECT null,'automotive'
+    WHERE NOT EXISTS(SELECT 1 FROM flyway_schema_history WHERE version = '2.0.0')
+);

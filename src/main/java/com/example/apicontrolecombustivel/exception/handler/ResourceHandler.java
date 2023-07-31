@@ -1,6 +1,7 @@
 package com.example.apicontrolecombustivel.exception.handler;
 
-import com.example.apicontrolecombustivel.dto.model.ErrorDto;
+import com.example.apicontrolecombustivel.dto.ErrorDto;
+import com.example.apicontrolecombustivel.exception.BusinessException;
 import com.example.apicontrolecombustivel.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +30,20 @@ public class ResourceHandler {
     }
     @ExceptionHandler
     public ResponseEntity<ErrorDto> notFoundException(NotFoundException f){
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         return ResponseEntity.status(httpStatus).body(ErrorDto.builder()
                 .httpStatus(httpStatus)
                 .HttpStatusCode(httpStatus.value())
                 .messages(Collections.singletonList(f.getMessage()))
+                .build());
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorDto> businessException(BusinessException b){
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(httpStatus).body(ErrorDto.builder()
+                .httpStatus(httpStatus)
+                .HttpStatusCode(httpStatus.value())
+                .messages(Collections.singletonList(b.getMessage()))
                 .build());
     }
 }

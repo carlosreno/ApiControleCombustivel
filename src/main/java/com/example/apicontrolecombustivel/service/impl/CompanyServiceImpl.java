@@ -1,11 +1,13 @@
 package com.example.apicontrolecombustivel.service.impl;
 
+import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.CompanyDto;
 import com.example.apicontrolecombustivel.exception.NotFoundException;
 import com.example.apicontrolecombustivel.mapper.CompanyMapper;
 import com.example.apicontrolecombustivel.model.jpa.Company;
 import com.example.apicontrolecombustivel.repositories.CompanyRepository;
 import com.example.apicontrolecombustivel.service.CompanyService;
+import com.example.apicontrolecombustivel.utils.MsgStandard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<Company> findAll() {
         return companyRepository.findAll();
+    }
+
+    @Override
+    public MessageDto delete(Long id) {
+        verifyIfExistAndReturn(id);
+        companyRepository.deleteById(id);
+        return MsgStandard.msgStandardOk("deleted");
     }
 
     @Override

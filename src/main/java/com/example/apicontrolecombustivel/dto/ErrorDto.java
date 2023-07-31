@@ -1,4 +1,4 @@
-package com.example.apicontrolecombustivel.dto.model;
+package com.example.apicontrolecombustivel.dto;
 
 import lombok.Builder;
 import org.springframework.http.HttpStatus;

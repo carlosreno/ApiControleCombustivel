@@ -3,8 +3,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "user_sector")
 @Data
+@Table(name = "user_sector")
 public class UserSector {
 
     @EmbeddedId
