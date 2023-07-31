@@ -134,4 +134,4 @@ ALTER TABLE fueling
 ALTER TABLE requests
         ADD CONSTRAINT fk_car_id FOREIGN KEY (car_id) REFERENCES cars(id),
         ADD CONSTRAINT fk_requester_id FOREIGN KEY (requester_id) REFERENCES user(id),
-        ADD CONSTRAINT fk1_contract_id FOREIGN KEY (contract_id) REFERENCES contract(id);
+        ADD CONSTRAINT fk2_contract_id FOREIGN KEY (contract_id) REFERENCES contract(id);

@@ -1,5 +1,20 @@
+#api
+server:
+  servlet:
+    context-path: /ctrl-fuel
+  port: ${SERVER_PORT:5000}
+#bd
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/combDb
-    username: admin
-    password: qwe123
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/combDb}
+    username: ${MYSQL_USERNAME:admin}
+    password: ${MYSQL_PASSWORD:qwe123}
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        #format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
