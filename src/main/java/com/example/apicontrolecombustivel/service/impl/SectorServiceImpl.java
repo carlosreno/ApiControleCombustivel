@@ -65,6 +65,7 @@ public class SectorServiceImpl implements SectorService {
     @Override
     public Sector patch(Long id, SectorDto dto) {
         var sectorDb = findById(id);
+        verifyIfExistCompanyAndReturn(dto.company_id());
         Sector sector = Sector.builder()
                 .id(id)
                 .company(dto.company_id() != null ?
@@ -85,7 +86,7 @@ public class SectorServiceImpl implements SectorService {
     }
     private void verifyIfNameBelongOtherRegister(Sector sector,String name,String nameDb){
         if (name != null && !name.equals(nameDb)){
-            if (verifyIfNotExistSectorWithName(name)){
+            if (Boolean.TRUE.equals(verifyIfNotExistSectorWithName(name))){
                 sector.setName(name);
             }
             return;

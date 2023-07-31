@@ -18,8 +18,9 @@ public class Car {
     private String renavam;
 
     private String placa;
-
-    private String type;
+    @ManyToOne
+    @JoinColumn(name = "type_vehicles_id")
+    private TypeVehicles typeVehicles;
 
     private String marca;
 
