@@ -1,11 +1,33 @@
 CREATE TABLE IF NOT EXISTS company (
      id INT AUTO_INCREMENT PRIMARY KEY,
-     name VARCHAR(100) NOT NULL,
+     razao_social VARCHAR(100) NOT NULL,
+     nome_fantasia VARCHAR(100),
      cnpj VARCHAR(18) NOT NULL,
-     address VARCHAR(200),
-     phone VARCHAR(20),
-     email VARCHAR(100)
+     company_type ENUM('supplier', 'manageable') NOT NULL
 );
+CREATE TABLE IF NOT EXISTS phone (
+                                        id INT AUTO_INCREMENT PRIMARY KEY,
+                                        ddi VARCHAR(3),
+                                        ddd VARCHAR(3),
+                                        number VARCHAR(9) NOT NULL,
+                                        type ENUM('phone', 'residential', 'commercial', 'other') NOT NULL,
+                                        company_id INT,
+                                        user_id INT
+);
+
+CREATE TABLE IF NOT EXISTS address (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          cep VARCHAR(10) NOT NULL,
+                          logradouro VARCHAR(200) NOT NULL,
+                          complemento VARCHAR(100),
+                          bairro VARCHAR(100) NOT NULL,
+                          localidade VARCHAR(100) NOT NULL,
+                          uf CHAR(2) NOT NULL,
+                          address_principal BOOLEAN NOT NULL DEFAULT 0,
+                          company_id INT,
+                          user_id INT
+);
+
 CREATE TABLE IF NOT EXISTS type_vehicles(
                                             id INT AUTO_INCREMENT PRIMARY KEY ,
                                             name VARCHAR(150) NOT NULL UNIQUE
@@ -39,15 +61,22 @@ CREATE TABLE IF NOT EXISTS availability (
                                       sector_id INT,
                                       status ENUM('active','disable')
 );
+CREATE TABLE IF NOT EXISTS user_type (
+                                         id INT AUTO_INCREMENT PRIMARY KEY,
+                                         name VARCHAR(100) NOT NULL
+);
 CREATE TABLE IF NOT EXISTS user (
                                       id INT AUTO_INCREMENT PRIMARY KEY,
                                       name VARCHAR(100) NOT NULL,
                                       company_id INT,
                                       user_type INT
 );
-CREATE TABLE IF NOT EXISTS user_type (
-                                      id INT AUTO_INCREMENT PRIMARY KEY,
-                                      name VARCHAR(100) NOT NULL
+CREATE TABLE IF NOT EXISTS user_credential (
+                                               id INT AUTO_INCREMENT PRIMARY KEY,
+                                               user_id INT NOT NULL,
+                                               username VARCHAR(50) NOT NULL UNIQUE,
+                                               password_hash VARCHAR(100) NOT NULL,
+                                               status ENUM('active','disable')
 );
 
 CREATE TABLE IF NOT EXISTS contract (
@@ -60,19 +89,15 @@ CREATE TABLE IF NOT EXISTS contract (
                           customer VARCHAR(100),
                           status ENUM('Active', 'Closed', 'Canceled', 'Suspended'),
                           comments TEXT,
-                          supplier_id INT
+                          company_id INT
+);
+CREATE TABLE IF NOT EXISTS fuel (
+                                    id INT AUTO_INCREMENT PRIMARY KEY,
+                                    name VARCHAR(100) NOT NULL,
+                                    unit VARCHAR(20) NOT NULL,
+                                    price_per_unit DECIMAL(10, 2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS supplier (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    cnpj VARCHAR(18) NOT NULL,
-    address VARCHAR(200),
-    phone VARCHAR(20),
-    email VARCHAR(100),
-    date_register DATE,
-    comments TEXT
-);
 CREATE TABLE IF NOT EXISTS user_sector (
                                user_id INT NOT NULL,
                                sector_id INT NOT NULL,
@@ -111,13 +136,13 @@ ALTER TABLE cars
     ADD CONSTRAINT fk_type_vehicles_id
         FOREIGN KEY (type_vehicles_id) references type_vehicles(id),
 
-    ADD CONSTRAINT fk1_company_id
+    ADD CONSTRAINT fk_company_id
         FOREIGN KEY (company_id) references company(id);
 
 
 ALTER TABLE contract
-    ADD CONSTRAINT fk_supplier_id
-    FOREIGN KEY (supplier_id) references supplier(id);
+    ADD CONSTRAINT fk1_company_id
+    FOREIGN KEY (company_id) references company(id);
 
 ALTER TABLE availability
     ADD CONSTRAINT fk_sector_id FOREIGN KEY (sector_id) references sector(id),
@@ -126,11 +151,15 @@ ALTER TABLE availability
 ALTER TABLE user
     ADD CONSTRAINT fk_user_type_id
     FOREIGN KEY (user_type) references user_type(id),
-    ADD CONSTRAINT fk_company_id
+    ADD CONSTRAINT fk2_company_id
     FOREIGN KEY (company_id) references company(id);
 
+ALTER TABLE user_credential
+    ADD CONSTRAINT fk_user_id
+    FOREIGN KEY (user_id) references user(id);
+
 ALTER TABLE sector
-    ADD CONSTRAINT fk2_company_id
+    ADD CONSTRAINT fk3_company_id
     FOREIGN KEY (company_id) references company(id);
 
 ALTER TABLE fueling
@@ -142,3 +171,11 @@ ALTER TABLE requests
         ADD CONSTRAINT fk_car_id FOREIGN KEY (car_id) REFERENCES cars(id),
         ADD CONSTRAINT fk_requester_id FOREIGN KEY (requester_id) REFERENCES user(id),
         ADD CONSTRAINT fk2_contract_id FOREIGN KEY (contract_id) REFERENCES contract(id);
+
+ALTER TABLE address
+        ADD CONSTRAINT fk2_user_id FOREIGN KEY (user_id) REFERENCES user(id),
+        ADD CONSTRAINT fk4_company_id FOREIGN KEY (company_id) REFERENCES company(id);
+
+ALTER TABLE phone
+        ADD CONSTRAINT fk3_user_id FOREIGN KEY (user_id) REFERENCES user(id),
+        ADD CONSTRAINT fk5_company_id FOREIGN KEY (company_id) REFERENCES company(id)
