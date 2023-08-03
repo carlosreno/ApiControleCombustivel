@@ -5,9 +5,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "contract")
+@Table(name = "contracts")
 @Data
 public class Contract {
 
@@ -35,6 +36,10 @@ public class Contract {
     private String comments;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
+    @OneToMany(mappedBy = "contract")
+    private List<FuelsContractItem> contractItems;
+
 }

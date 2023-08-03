@@ -61,8 +61,6 @@ public class CompanyServiceImpl implements CompanyService {
                 .name(dto.name() != null ? dto.name() : companyDb.getName())
                 .cnpj(dto.cnpj() != null ? dto.cnpj() : companyDb.getCnpj())
                 .email(dto.email() != null ? dto.email() : companyDb.getEmail())
-                .phone(dto.phone() != null ? dto.phone() : companyDb.getPhone())
-                .address(dto.address() != null ? dto.address() : companyDb.getAddress())
                 .build();
         return companyRepository.save(company);
     }

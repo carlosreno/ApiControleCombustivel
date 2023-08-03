@@ -11,8 +11,6 @@ public class CompanyMapper {
                 .id(id)
                 .cnpj(dto.cnpj())
                 .name(dto.name())
-                .address(dto.address())
-                .phone(dto.phone())
                 .email(dto.email())
                 .build();
     }

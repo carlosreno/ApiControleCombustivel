@@ -18,6 +18,6 @@ public class User {
     private Company company;
 
     @ManyToOne
-    @JoinColumn(name = "user_type_id")
+    @JoinColumn(name = "user_type")
     private UserType userType;
 }

@@ -1,6 +1,6 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
-import com.example.apicontrolecombustivel.enums.CarStatus;
+import com.example.apicontrolecombustivel.enums.OnOrOf;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -48,5 +48,5 @@ public class Car {
     private Availability activeAvailability;
 
     @Enumerated(EnumType.STRING)
-    private CarStatus status;
+    private OnOrOf status;
 }

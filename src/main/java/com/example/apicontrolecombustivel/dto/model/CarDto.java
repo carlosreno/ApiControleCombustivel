@@ -1,6 +1,6 @@
 package com.example.apicontrolecombustivel.dto.model;
 
-import com.example.apicontrolecombustivel.enums.CarStatus;
+import com.example.apicontrolecombustivel.enums.OnOrOf;
 import com.example.apicontrolecombustivel.model.jpa.Availability;
 import com.example.apicontrolecombustivel.model.jpa.Company;
 import jakarta.persistence.*;
@@ -25,6 +25,6 @@ public record CarDto(
         Company company,
         Availability activeAvailability,
         @Enumerated(EnumType.STRING)
-        CarStatus status
+        OnOrOf status
 ) {
 }

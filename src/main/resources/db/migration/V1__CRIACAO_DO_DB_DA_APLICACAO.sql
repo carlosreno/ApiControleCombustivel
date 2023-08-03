@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS company (
+CREATE TABLE IF NOT EXISTS companies (
      id INT AUTO_INCREMENT PRIMARY KEY,
      razao_social VARCHAR(100) NOT NULL,
      nome_fantasia VARCHAR(100),
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS user_credential (
                                                status ENUM('active','disable')
 );
 
-CREATE TABLE IF NOT EXISTS contract (
+CREATE TABLE IF NOT EXISTS contracts (
                           id INT AUTO_INCREMENT PRIMARY KEY,
                           number_contract VARCHAR(50) NOT NULL,
                           object TEXT NOT NULL,
@@ -91,11 +91,20 @@ CREATE TABLE IF NOT EXISTS contract (
                           comments TEXT,
                           company_id INT
 );
-CREATE TABLE IF NOT EXISTS fuel (
+
+CREATE TABLE IF NOT EXISTS fuels_contract_items(
+    fuel_id INT NOT NULL ,
+    contract_id INT NOT NULL ,
+    primary key(contract_id,fuel_id),
+    amount INT NOT NULL ,
+    price_per_unit DECIMAL(10, 2) NOT NULL,
+    total_cost DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS fuels (
                                     id INT AUTO_INCREMENT PRIMARY KEY,
                                     name VARCHAR(100) NOT NULL,
-                                    unit VARCHAR(20) NOT NULL,
-                                    price_per_unit DECIMAL(10, 2) NOT NULL
+                                    unit VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user_sector (
@@ -137,12 +146,18 @@ ALTER TABLE cars
         FOREIGN KEY (type_vehicles_id) references type_vehicles(id),
 
     ADD CONSTRAINT fk_company_id
-        FOREIGN KEY (company_id) references company(id);
+        FOREIGN KEY (company_id) references companies(id);
 
 
-ALTER TABLE contract
+ALTER TABLE contracts
     ADD CONSTRAINT fk1_company_id
-    FOREIGN KEY (company_id) references company(id);
+    FOREIGN KEY (company_id) references companies(id);
+
+ALTER TABLE fuels_contract_items
+    ADD CONSTRAINT fk_fuel_id
+        FOREIGN KEY (fuel_id) references fuels (id),
+    ADD CONSTRAINT fk6_contract_id
+        FOREIGN KEY (contract_id) references contracts(id);
 
 ALTER TABLE availability
     ADD CONSTRAINT fk_sector_id FOREIGN KEY (sector_id) references sector(id),
@@ -152,7 +167,7 @@ ALTER TABLE user
     ADD CONSTRAINT fk_user_type_id
     FOREIGN KEY (user_type) references user_type(id),
     ADD CONSTRAINT fk2_company_id
-    FOREIGN KEY (company_id) references company(id);
+    FOREIGN KEY (company_id) references companies(id);
 
 ALTER TABLE user_credential
     ADD CONSTRAINT fk_user_id
@@ -160,22 +175,22 @@ ALTER TABLE user_credential
 
 ALTER TABLE sector
     ADD CONSTRAINT fk3_company_id
-    FOREIGN KEY (company_id) references company(id);
+    FOREIGN KEY (company_id) references companies(id);
 
 ALTER TABLE fueling
       ADD CONSTRAINT fk_fueling_car_id FOREIGN KEY (car_id) REFERENCES cars(id),
-      ADD CONSTRAINT fk1_contract_id FOREIGN KEY (contract_id) REFERENCES contract(id),
+      ADD CONSTRAINT fk1_contract_id FOREIGN KEY (contract_id) REFERENCES contracts (id),
       ADD CONSTRAINT fk_request_id FOREIGN KEY (request_id) REFERENCES requests(id);
 
 ALTER TABLE requests
         ADD CONSTRAINT fk_car_id FOREIGN KEY (car_id) REFERENCES cars(id),
         ADD CONSTRAINT fk_requester_id FOREIGN KEY (requester_id) REFERENCES user(id),
-        ADD CONSTRAINT fk2_contract_id FOREIGN KEY (contract_id) REFERENCES contract(id);
+        ADD CONSTRAINT fk2_contract_id FOREIGN KEY (contract_id) REFERENCES contracts (id);
 
 ALTER TABLE address
         ADD CONSTRAINT fk2_user_id FOREIGN KEY (user_id) REFERENCES user(id),
-        ADD CONSTRAINT fk4_company_id FOREIGN KEY (company_id) REFERENCES company(id);
+        ADD CONSTRAINT fk4_company_id FOREIGN KEY (company_id) REFERENCES companies(id);
 
 ALTER TABLE phone
         ADD CONSTRAINT fk3_user_id FOREIGN KEY (user_id) REFERENCES user(id),
-        ADD CONSTRAINT fk5_company_id FOREIGN KEY (company_id) REFERENCES company(id)
+        ADD CONSTRAINT fk5_company_id FOREIGN KEY (company_id) REFERENCES companies(id)

@@ -5,22 +5,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "availability")
 @Data
-public class Availability {
-
+@Table(name = "user_credential")
+public class UserCredential{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "car_id")
-    private Car car;
-
-    @ManyToOne
-    @JoinColumn(name = "sector_id")
-    private Sector sector;
-
-    @Enumerated(EnumType.STRING)
+    @OneToOne
+    private User user;
+    private String userName;
+    private String passwordHash;
     private OnOrOf status;
 }

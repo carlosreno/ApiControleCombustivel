@@ -1,6 +1,6 @@
 package com.example.apicontrolecombustivel.enums;
 
-public enum AvailabilityStatus {
+public enum OnOrOf {
     ACTIVE,
-    DISABLE
+    DISABLED
 }
