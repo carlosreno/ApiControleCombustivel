@@ -6,9 +6,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "requests")
-@Data
 public class Request {
 
     @Id
@@ -16,6 +16,10 @@ public class Request {
     private Long id;
 
     private Date requestDate;
+
+    @ManyToOne
+    @JoinColumn(name = "fuels_contract")
+    private Fuel fuelsContract;
 
     private Double fuelAmount;
 
@@ -31,7 +35,7 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "requester_id")
-    private User requester;
+    private Users requester;
 
     @ManyToOne
     @JoinColumn(name = "contract_id")

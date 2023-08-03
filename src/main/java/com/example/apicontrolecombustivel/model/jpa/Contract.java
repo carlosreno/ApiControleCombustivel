@@ -27,8 +27,6 @@ public class Contract {
 
     private Double value;
 
-    private String customer;
-
     @Enumerated(EnumType.STRING)
     private ContractStatus status;
 
@@ -36,10 +34,10 @@ public class Contract {
     private String comments;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Company customer;
 
-    @OneToMany(mappedBy = "contract")
+    @OneToMany
     private List<FuelsContractItem> contractItems;
 
 }

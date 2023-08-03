@@ -2,7 +2,7 @@ package com.example.apicontrolecombustivel.controller;
 
 import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.SectorDto;
-import com.example.apicontrolecombustivel.model.jpa.Sector;
+import com.example.apicontrolecombustivel.model.jpa.Sectors;
 import com.example.apicontrolecombustivel.service.SectorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +19,17 @@ public class SectorController {
     private final SectorService sectorService;
 
     @PostMapping("/create")
-    public ResponseEntity<Sector> create(@Valid @RequestBody SectorDto dto){
+    public ResponseEntity<Sectors> create(@Valid @RequestBody SectorDto dto){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(sectorService.create(dto));
     }
     @GetMapping("/findAll")
-    public ResponseEntity<List<Sector>> findAll(){
+    public ResponseEntity<List<Sectors>> findAll(){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(sectorService.findAll());
     }
     @GetMapping("/findById/{id}")
-    public ResponseEntity<Sector> findById(@PathVariable Long id){
+    public ResponseEntity<Sectors> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(sectorService.findById(id));
     }
@@ -39,12 +39,12 @@ public class SectorController {
                 .body(sectorService.delete(id));
     }
     @PutMapping("/put/{id}")
-    public ResponseEntity<Sector> put(@PathVariable Long id,@Valid @RequestBody SectorDto dto){
+    public ResponseEntity<Sectors> put(@PathVariable Long id,@Valid @RequestBody SectorDto dto){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(sectorService.put(id,dto));
     }
     @PatchMapping("/patch/{id}")
-    public ResponseEntity<Sector> patch(@PathVariable Long id,@RequestBody SectorDto dto){
+    public ResponseEntity<Sectors> patch(@PathVariable Long id,@RequestBody SectorDto dto){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(sectorService.patch(id,dto));
     }

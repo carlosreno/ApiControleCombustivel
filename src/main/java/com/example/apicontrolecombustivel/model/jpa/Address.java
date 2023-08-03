@@ -1,13 +1,21 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "address")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +42,13 @@ public class Address {
     @Column(nullable = false)
     private boolean addressPrincipal;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 }

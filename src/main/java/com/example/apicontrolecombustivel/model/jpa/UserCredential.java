@@ -12,7 +12,7 @@ public class UserCredential{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    private User user;
+    private Users users;
     private String userName;
     private String passwordHash;
     private OnOrOf status;

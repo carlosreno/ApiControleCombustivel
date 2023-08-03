@@ -19,7 +19,7 @@ public class Availability {
 
     @ManyToOne
     @JoinColumn(name = "sector_id")
-    private Sector sector;
+    private Sectors sector;
 
     @Enumerated(EnumType.STRING)
     private OnOrOf status;

@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS cars (
                                     status ENUM('active','disabled')
 );
 
-CREATE TABLE IF NOT EXISTS sector (
+CREATE TABLE IF NOT EXISTS sectors (
                                       id INT AUTO_INCREMENT PRIMARY KEY,
                                       name VARCHAR(100) NOT NULL,
                                       company_id INT
@@ -86,10 +86,23 @@ CREATE TABLE IF NOT EXISTS contracts (
                           date_initial DATE,
                           date_final DATE,
                           value DECIMAL(10, 2),
-                          customer VARCHAR(100),
                           status ENUM('Active', 'Closed', 'Canceled', 'Suspended'),
                           comments TEXT,
-                          company_id INT
+                          customer_id INT
+);
+CREATE TABLE IF NOT EXISTS contract_addendum (
+                                                 id INT AUTO_INCREMENT PRIMARY KEY,
+                                                 contract_id INT NOT NULL,
+                                                 type ENUM('term','value','amount'),
+                                                 addendum_date DATE NOT NULL,
+                                                 FOREIGN KEY (contract_id) REFERENCES contracts(id)
+);
+CREATE TABLE IF NOT EXISTS addendum_contract_items (
+                                       addendum_id INT NOT NULL,
+                                       contract_item_id INT NOT NULL,
+                                       PRIMARY KEY (addendum_id, contract_item_id),
+                                       new_quantity DECIMAL(10, 2),
+                                       new_value DECIMAL(10, 2)
 );
 
 CREATE TABLE IF NOT EXISTS fuels_contract_items(
@@ -112,12 +125,13 @@ CREATE TABLE IF NOT EXISTS user_sector (
                                sector_id INT NOT NULL,
                                PRIMARY KEY (user_id, sector_id),
                                FOREIGN KEY (user_id) REFERENCES user(id),
-                               FOREIGN KEY (sector_id) REFERENCES sector(id)
+                               FOREIGN KEY (sector_id) REFERENCES sectors (id)
 );
 
 CREATE TABLE IF NOT EXISTS requests (
                                         id INT AUTO_INCREMENT PRIMARY KEY,
                                         request_date DATE NOT NULL,
+                                        fuels_contract INT NOT NULL ,
                                         fuel_amount DECIMAL(10, 2) NOT NULL,
                                         comments TEXT,
                                         status ENUM('Pending', 'Approved', 'Rejected', 'Completed') NOT NULL,
@@ -129,9 +143,11 @@ CREATE TABLE IF NOT EXISTS requests (
 CREATE TABLE IF NOT EXISTS fueling (
                                        id INT AUTO_INCREMENT PRIMARY KEY,
                                        fuel_date DATE NOT NULL,
+                                       fuels_contract INT NOT NULL ,
                                        fuel_amount DECIMAL(10, 2) NOT NULL,
                                        price_per_unit DECIMAL(10, 2) NOT NULL,
                                        total_cost DECIMAL(10, 2) NOT NULL,
+                                       mileage FLOAT,
                                        comments TEXT,
                                        car_id INT NOT NULL,
                                        request_id INT,
@@ -151,7 +167,7 @@ ALTER TABLE cars
 
 ALTER TABLE contracts
     ADD CONSTRAINT fk1_company_id
-    FOREIGN KEY (company_id) references companies(id);
+    FOREIGN KEY (customer_id) references companies(id);
 
 ALTER TABLE fuels_contract_items
     ADD CONSTRAINT fk_fuel_id
@@ -160,7 +176,7 @@ ALTER TABLE fuels_contract_items
         FOREIGN KEY (contract_id) references contracts(id);
 
 ALTER TABLE availability
-    ADD CONSTRAINT fk_sector_id FOREIGN KEY (sector_id) references sector(id),
+    ADD CONSTRAINT fk_sector_id FOREIGN KEY (sector_id) references sectors(id),
     ADD CONSTRAINT car_id FOREIGN KEY (car_id) references cars(id);
 
 ALTER TABLE user
@@ -173,17 +189,19 @@ ALTER TABLE user_credential
     ADD CONSTRAINT fk_user_id
     FOREIGN KEY (user_id) references user(id);
 
-ALTER TABLE sector
+ALTER TABLE sectors
     ADD CONSTRAINT fk3_company_id
     FOREIGN KEY (company_id) references companies(id);
 
 ALTER TABLE fueling
       ADD CONSTRAINT fk_fueling_car_id FOREIGN KEY (car_id) REFERENCES cars(id),
+      ADD CONSTRAINT fk1_item_contract_id FOREIGN KEY (fuels_contract) REFERENCES fuels_contract_items(fuel_id),
       ADD CONSTRAINT fk1_contract_id FOREIGN KEY (contract_id) REFERENCES contracts (id),
       ADD CONSTRAINT fk_request_id FOREIGN KEY (request_id) REFERENCES requests(id);
 
 ALTER TABLE requests
         ADD CONSTRAINT fk_car_id FOREIGN KEY (car_id) REFERENCES cars(id),
+        ADD CONSTRAINT fk2_item_contract_id FOREIGN KEY (fuels_contract) REFERENCES fuels_contract_items(fuel_id),
         ADD CONSTRAINT fk_requester_id FOREIGN KEY (requester_id) REFERENCES user(id),
         ADD CONSTRAINT fk2_contract_id FOREIGN KEY (contract_id) REFERENCES contracts (id);
 
@@ -193,4 +211,9 @@ ALTER TABLE address
 
 ALTER TABLE phone
         ADD CONSTRAINT fk3_user_id FOREIGN KEY (user_id) REFERENCES user(id),
-        ADD CONSTRAINT fk5_company_id FOREIGN KEY (company_id) REFERENCES companies(id)
+        ADD CONSTRAINT fk5_company_id FOREIGN KEY (company_id) REFERENCES companies(id);
+
+ALTER TABLE addendum_contract_items
+    ADD CONSTRAINT fk_addendum_id FOREIGN KEY (addendum_id) REFERENCES contract_addendum(id),
+    ADD CONSTRAINT fk_contract_item_id
+        FOREIGN KEY (addendum_id,contract_item_id) REFERENCES fuels_contract_items(fuel_id,contract_id)

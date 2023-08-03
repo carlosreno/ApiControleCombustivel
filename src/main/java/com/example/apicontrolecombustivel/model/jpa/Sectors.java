@@ -7,13 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "sector")
-public class Sector {
+@Table(name = "sectors")
+public class Sectors {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +27,12 @@ public class Sector {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_sector",
+            joinColumns = @JoinColumn(name = "sector_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<Users> users;
 }

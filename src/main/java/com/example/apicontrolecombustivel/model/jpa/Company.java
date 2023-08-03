@@ -18,23 +18,27 @@ import java.util.List;
 public class Company {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    @Column(name = "razao_social")
+    private String razaoSocial;
+
+    @Column(name = "nome_fantasia")
+    private String nomeFantasia;
+
     private String cnpj;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CompanyType companyType;
 
-    @OneToMany
+    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
     private List<Phone> phones;
 
-    @OneToMany
+    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
     private List<Address> address;
 
-    private String email;
-
-    @OneToMany(mappedBy = "company",fetch = FetchType.EAGER)
-    private List<Sector> sector;
+    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+    private List<Sectors> sector;
 }

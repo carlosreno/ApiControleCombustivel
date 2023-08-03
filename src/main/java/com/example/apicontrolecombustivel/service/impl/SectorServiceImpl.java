@@ -6,7 +6,7 @@ import com.example.apicontrolecombustivel.exception.BusinessException;
 import com.example.apicontrolecombustivel.exception.NotFoundException;
 import com.example.apicontrolecombustivel.mapper.SectorMapper;
 import com.example.apicontrolecombustivel.model.jpa.Company;
-import com.example.apicontrolecombustivel.model.jpa.Sector;
+import com.example.apicontrolecombustivel.model.jpa.Sectors;
 import com.example.apicontrolecombustivel.repositories.SectorRepository;
 import com.example.apicontrolecombustivel.service.CompanyService;
 import com.example.apicontrolecombustivel.service.SectorService;
@@ -23,20 +23,20 @@ public class SectorServiceImpl implements SectorService {
     private final CompanyService companyService;
 
     @Override
-    public Sector create(SectorDto dto) {
+    public Sectors create(SectorDto dto) {
         Company company = verifyIfExistCompanyAndReturn(dto.company_id());
-        verifyIfNotExistSectorWithName(dto.name());
-        Sector sector = SectorMapper.fromDtoToEntity(null,dto,company);
+        verifyIfNotExistSectorsWithName(dto.name());
+        Sectors sector = SectorMapper.fromDtoToEntity(null,dto,company);
         return sectorRepository.save(sector);
     }
 
     @Override
-    public List<Sector> findAll() {
+    public List<Sectors> findAll() {
         return sectorRepository.findAll();
     }
 
     @Override
-    public Sector findById(Long id) {
+    public Sectors findById(Long id) {
         return verifyIfExistAndReturn(id);
     }
 
@@ -47,26 +47,26 @@ public class SectorServiceImpl implements SectorService {
         return MsgStandard.msgStandardOk("deleted");
     }
 
-    private Sector verifyIfExistAndReturn(Long id) {
+    private Sectors verifyIfExistAndReturn(Long id) {
         return sectorRepository.findById(id).orElseThrow(
-                ()-> new NotFoundException("Sector with this id not exist")
+                ()-> new NotFoundException("Sectors with this id not exist")
         );
     }
 
     @Override
-    public Sector put(Long id, SectorDto dto) {
+    public Sectors put(Long id, SectorDto dto) {
         Company company = verifyIfExistCompanyAndReturn(dto.company_id());
-        Sector sectorDb = findById(id);
-        Sector sector = SectorMapper.fromDtoToEntity(id,dto,company);
+        Sectors sectorDb = findById(id);
+        Sectors sector = SectorMapper.fromDtoToEntity(id,dto,company);
         verifyIfNameBelongOtherRegister(sector, dto.name(), sectorDb.getName());
         return sectorRepository.save(sector);
     }
 
     @Override
-    public Sector patch(Long id, SectorDto dto) {
+    public Sectors patch(Long id, SectorDto dto) {
         var sectorDb = findById(id);
         verifyIfExistCompanyAndReturn(dto.company_id());
-        Sector sector = Sector.builder()
+        Sectors sector = Sectors.builder()
                 .id(id)
                 .company(dto.company_id() != null ?
                         verifyIfExistCompanyAndReturn(id) : sectorDb.getCompany())
@@ -78,15 +78,15 @@ public class SectorServiceImpl implements SectorService {
     private Company verifyIfExistCompanyAndReturn(Long id){
         return companyService.findById(id);
     }
-    private Boolean verifyIfNotExistSectorWithName(String name){
+    private Boolean verifyIfNotExistSectorsWithName(String name){
         if (sectorRepository.findByName(name).isEmpty()){
             return true;
         }
         throw new BusinessException("sector with this name already exist");
     }
-    private void verifyIfNameBelongOtherRegister(Sector sector,String name,String nameDb){
+    private void verifyIfNameBelongOtherRegister(Sectors sector,String name,String nameDb){
         if (name != null && !name.equals(nameDb)){
-            if (Boolean.TRUE.equals(verifyIfNotExistSectorWithName(name))){
+            if (Boolean.TRUE.equals(verifyIfNotExistSectorsWithName(name))){
                 sector.setName(name);
             }
             return;

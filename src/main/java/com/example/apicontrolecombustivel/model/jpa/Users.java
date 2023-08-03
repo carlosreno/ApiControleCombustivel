@@ -2,10 +2,12 @@ package com.example.apicontrolecombustivel.model.jpa;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 @Data
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +22,7 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "user_type")
     private UserType userType;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Sectors> sectors;
 }

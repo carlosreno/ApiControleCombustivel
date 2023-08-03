@@ -7,21 +7,30 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Entity
 @Data
+@Entity
 @Table(name = "fuels_contract_items")
 public class FuelsContractItem {
 
     @EmbeddedId
     private FuelsContractItemKey id;
 
-    @Column(name = "amount")
+    @ManyToOne
+    @MapsId("contractId")
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
+
+    @ManyToOne
+    @MapsId("fuelId")
+    @JoinColumn(name = "fuel_id")
+    private Fuel fuel;
+
+    @Column(name = "amount", nullable = false)
     private int amount;
 
-    @Column(name = "price_per_unit")
+    @Column(name = "price_per_unit", nullable = false)
     private BigDecimal pricePerUnit;
 
-    @Column(name = "total_cost")
+    @Column(name = "total_cost", nullable = false)
     private BigDecimal totalCost;
-
 }

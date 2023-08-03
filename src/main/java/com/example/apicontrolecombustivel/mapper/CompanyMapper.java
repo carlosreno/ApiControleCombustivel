@@ -10,8 +10,6 @@ public class CompanyMapper {
         return Company.builder()
                 .id(id)
                 .cnpj(dto.cnpj())
-                .name(dto.name())
-                .email(dto.email())
                 .build();
     }
 }

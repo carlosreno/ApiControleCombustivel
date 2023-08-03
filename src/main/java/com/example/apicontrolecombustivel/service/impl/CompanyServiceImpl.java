@@ -58,9 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
         var companyDb = findById(id);
         Company company = Company.builder()
                 .id(id)
-                .name(dto.name() != null ? dto.name() : companyDb.getName())
                 .cnpj(dto.cnpj() != null ? dto.cnpj() : companyDb.getCnpj())
-                .email(dto.email() != null ? dto.email() : companyDb.getEmail())
                 .build();
         return companyRepository.save(company);
     }
