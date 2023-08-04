@@ -7,6 +7,7 @@ import com.example.apicontrolecombustivel.exception.NotFoundException;
 import com.example.apicontrolecombustivel.mapper.SectorMapper;
 import com.example.apicontrolecombustivel.model.jpa.Company;
 import com.example.apicontrolecombustivel.model.jpa.Sectors;
+import com.example.apicontrolecombustivel.model.jpa.Users;
 import com.example.apicontrolecombustivel.repositories.SectorRepository;
 import com.example.apicontrolecombustivel.service.CompanyService;
 import com.example.apicontrolecombustivel.service.SectorService;
@@ -59,6 +60,8 @@ public class SectorServiceImpl implements SectorService {
         Sectors sectorDb = findById(id);
         Sectors sector = SectorMapper.fromDtoToEntity(id,dto,company);
         verifyIfNameBelongOtherRegister(sector, dto.name(), sectorDb.getName());
+        sector.setUsers(sectorDb.getUsers());
+//        syncUsersList(sectorDb,sector);
         return sectorRepository.save(sector);
     }
 
@@ -73,6 +76,7 @@ public class SectorServiceImpl implements SectorService {
                 .name(dto.name() != null ? dto.name() : sectorDb.getName())
                 .build();
         verifyIfNameBelongOtherRegister(sector, dto.name(), sectorDb.getName());
+        sector.setUsers(sectorDb.getUsers());
         return sectorRepository.save(sector);
     }
     private Company verifyIfExistCompanyAndReturn(Long id){
@@ -92,6 +96,14 @@ public class SectorServiceImpl implements SectorService {
             return;
         }
         sector.setName(nameDb);
+    }
+    private void syncUsersList(Sectors sectorDb,Sectors sectors) {
+        var userList = sectorDb.getUsers();
+        for (Users newUser : userList) {
+            if (!sectorDb.getUsers().contains(newUser)) {
+                sectorDb.getUsers().add(newUser);
+            }
+        }
     }
 
 }

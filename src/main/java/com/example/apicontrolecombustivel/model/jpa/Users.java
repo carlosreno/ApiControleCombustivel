@@ -1,4 +1,5 @@
 package com.example.apicontrolecombustivel.model.jpa;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class Users {
     private Long id;
 
     private String name;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
@@ -23,6 +24,7 @@ public class Users {
     @JoinColumn(name = "user_type")
     private UserType userType;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "users")
     private List<Sectors> sectors;
 }

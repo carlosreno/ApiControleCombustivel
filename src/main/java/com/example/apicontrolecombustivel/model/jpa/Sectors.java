@@ -28,7 +28,7 @@ public class Sectors {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_sector",
             joinColumns = @JoinColumn(name = "sector_id"),
