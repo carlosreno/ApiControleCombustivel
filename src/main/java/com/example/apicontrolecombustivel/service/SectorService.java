@@ -10,6 +10,7 @@ public interface SectorService {
     Sectors create(SectorDto dto);
     List<Sectors> findAll();
     Sectors findById(Long id);
+    List<Sectors> findAllById(List<Long> sectorsId);
     MessageDto delete(Long id);
     Sectors put(Long id, SectorDto dto);
     Sectors patch(Long id,SectorDto dto);

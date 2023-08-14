@@ -42,6 +42,18 @@ public class SectorServiceImpl implements SectorService {
     }
 
     @Override
+    public List<Sectors> findAllById(List<Long> sectorsId) {
+        List<Sectors> sectors = sectorRepository.findAllById(sectorsId);
+        if (sectors.size() != sectorsId.size()){
+            List<Long> sectorsIdsNotFound = sectors.stream()
+                    .map(Sectors::getId)
+                    .filter(sectorId -> !sectorsId.contains(sectorId)).toList();
+            throw new NotFoundException("Sectors with the following IDs were not found");
+        }
+        return sectors;
+    }
+
+    @Override
     public MessageDto delete(Long id) {
         var sector = verifyIfExistAndReturn(id);
         sectorRepository.deleteById(sector.getId());
