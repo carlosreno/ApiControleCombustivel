@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +44,17 @@ public class SectorServiceImpl implements SectorService {
     }
 
     @Override
-    public List<Sectors> findAllById(List<Long> sectorsId) {
+    public List<Sectors> findAllById(Set<Long> sectorsId) {
         List<Sectors> sectors = sectorRepository.findAllById(sectorsId);
         if (sectors.size() != sectorsId.size()){
-            List<Long> sectorsIdsNotFound = sectors.stream()
+            List<Long> sectorIdsFound = sectors.stream()
                     .map(Sectors::getId)
-                    .filter(sectorId -> !sectorsId.contains(sectorId)).toList();
-            throw new NotFoundException("Sectors with the following IDs were not found");
+                    .toList();
+
+            Set<Long> sectorsIdsNotFound = sectorsId.stream()
+                    .filter(id -> !sectorIdsFound.contains(id)).collect(Collectors.toSet());
+
+            throw new NotFoundException("Sectors with the following IDs were not found"+sectorsIdsNotFound);
         }
         return sectors;
     }

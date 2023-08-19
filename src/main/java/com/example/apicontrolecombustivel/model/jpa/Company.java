@@ -1,6 +1,7 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
 import com.example.apicontrolecombustivel.enums.CompanyType;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,6 @@ public class Company {
     private String cnpj;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private CompanyType companyType;
 
     @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)

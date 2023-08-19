@@ -31,6 +31,11 @@ public class Users {
     private UserType userType;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "user_sector",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "sector_id")
+    )
     private List<Sectors> sectors;
 }

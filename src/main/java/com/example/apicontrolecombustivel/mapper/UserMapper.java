@@ -1,20 +1,23 @@
 package com.example.apicontrolecombustivel.mapper;
 
-import com.example.apicontrolecombustivel.dto.model.SectorDto;
+import java.util.List;
+
 import com.example.apicontrolecombustivel.dto.model.UserDto;
 import com.example.apicontrolecombustivel.model.jpa.Company;
 import com.example.apicontrolecombustivel.model.jpa.Sectors;
+import com.example.apicontrolecombustivel.model.jpa.UserType;
 import com.example.apicontrolecombustivel.model.jpa.Users;
-import lombok.experimental.UtilityClass;
 
-import java.util.List;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class UserMapper {
-    public static Users fromDtoToEntity(Long id, UserDto dto, List<Sectors> sectors, Company company){
+    public static Users fromDtoToEntity(Long id, UserDto dto,List<Sectors> sectors,
+                                        UserType type, Company company){
         return Users.builder()
                 .id(id)
                 .name(dto.name())
+                .userType(type)
                 .company(company)
                 .sectors(sectors)
                 .build();

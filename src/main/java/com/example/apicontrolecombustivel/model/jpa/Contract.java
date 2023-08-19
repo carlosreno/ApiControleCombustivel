@@ -1,15 +1,24 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
 import com.example.apicontrolecombustivel.enums.ContractStatus;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "contracts")
 @Data
+@Entity
+@Builder
+@Table(name = "contracts")
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonAutoDetect
 public class Contract {
 
     @Id
@@ -21,9 +30,9 @@ public class Contract {
     @Column(length = 2000)
     private String object;
 
-    private Date dateInitial;
+    private LocalDate dateInitial;
 
-    private Date dateFinal;
+    private LocalDate dateFinal;
 
     private Double value;
 
@@ -37,7 +46,11 @@ public class Contract {
     @JoinColumn(name = "customer_id", nullable = false)
     private Company customer;
 
-    @OneToMany
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false)
+    private Company supplier;
+
+    @OneToMany(mappedBy = "contract",fetch = FetchType.LAZY)
     private List<FuelsContractItem> contractItems;
 
 }

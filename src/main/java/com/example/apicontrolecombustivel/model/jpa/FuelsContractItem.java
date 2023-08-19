@@ -1,5 +1,6 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -16,6 +17,7 @@ public class FuelsContractItem {
     private FuelsContractItemKey id;
 
     @ManyToOne
+    @JsonIgnore
     @MapsId("contractId")
     @JoinColumn(name = "contract_id")
     private Contract contract;

@@ -1,5 +1,10 @@
 package com.example.apicontrolecombustivel.service.impl;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
 import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.UserDto;
 import com.example.apicontrolecombustivel.exception.NotFoundException;
@@ -14,10 +19,8 @@ import com.example.apicontrolecombustivel.service.SectorService;
 import com.example.apicontrolecombustivel.service.UserService;
 import com.example.apicontrolecombustivel.service.UserTypeService;
 import com.example.apicontrolecombustivel.utils.MsgStandard;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +35,8 @@ public class UserServiceImpl implements UserService {
         Company company = getCompanyById(dto);
         UserType userType = getTypeById(dto);
         List<Sectors> sectors = getAllSectorsById(dto.sectorIds());
-        Users users = UserMapper.fromDtoToEntity(null,dto,sectors,company);
+        Users users = UserMapper.fromDtoToEntity(null,dto,sectors,userType,company);
         return userRepository.save(users);
-    }
-
-    private UserType getTypeById(UserDto dto) {
-        return userTypeService.findById(dto.userTypeId());
     }
 
     @Override
@@ -66,29 +65,34 @@ public class UserServiceImpl implements UserService {
     public Users put(Long id, UserDto dto) {
         returnIfExist(id);
         Company company = getCompanyById(dto);
+        UserType userType = getTypeById(dto);
         List<Sectors> sectors = getAllSectorsById(dto.sectorIds());
-        Users users = UserMapper.fromDtoToEntity(id,dto,sectors,company);
+        Users users = UserMapper.fromDtoToEntity(id,dto,sectors,userType,company);
         return userRepository.save(users);
     }
 
     @Override
     public Users patch(Long id, UserDto dto) {
         Users usersDb = returnIfExist(id);
-        Users NewDataUser = Users.builder()
+        Users newDataUser = Users.builder()
                 .id(id)
                 .name(dto.name() != null ? dto.name() : usersDb.getName())
                 .userType(dto.userTypeId() != null ? getTypeById(dto) : usersDb.getUserType())
                 .sectors(dto.sectorIds() != null ? getAllSectorsById(dto.sectorIds()) : usersDb.getSectors())
                 .company(dto.companyId() != null ? getCompanyById(dto) : usersDb.getCompany())
                 .build();
-        return null;
+        return userRepository.save(newDataUser);
     }
 
     private Company getCompanyById(UserDto dto) {
         return companyService.findById(dto.companyId());
     }
 
-    private List<Sectors> getAllSectorsById(List<Long> sectorIds) {
+    private List<Sectors> getAllSectorsById(Set<Long> sectorIds) {
         return sectorService.findAllById(sectorIds);
+    }
+
+    private UserType getTypeById(UserDto dto) {
+        return userTypeService.findById(dto.userTypeId());
     }
 }
