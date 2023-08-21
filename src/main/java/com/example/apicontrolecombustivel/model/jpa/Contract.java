@@ -2,11 +2,13 @@ package com.example.apicontrolecombustivel.model.jpa;
 
 import com.example.apicontrolecombustivel.enums.ContractStatus;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -29,7 +31,6 @@ public class Contract {
 
     @Column(length = 2000)
     private String object;
-
     private LocalDate dateInitial;
 
     private LocalDate dateFinal;

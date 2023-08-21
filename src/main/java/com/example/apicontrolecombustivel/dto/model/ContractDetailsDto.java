@@ -6,13 +6,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
-
-public record ContractDto(
-
+@Builder
+public record ContractDetailsDto(
         @NotNull
         String numberContract,
         @NotBlank
