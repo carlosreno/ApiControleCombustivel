@@ -22,8 +22,8 @@ public record CarDto(
         Double mileage,
         Date fabricationDate,
         String comments,
-        Company company,
-        Availability activeAvailability,
+        Long companyId,
+        Long activeAvailabilityId,
         @Enumerated(EnumType.STRING)
         OnOrOf status
 ) {

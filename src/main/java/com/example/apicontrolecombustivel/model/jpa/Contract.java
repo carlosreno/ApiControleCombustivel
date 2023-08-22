@@ -32,7 +32,6 @@ public class Contract {
     @Column(length = 2000)
     private String object;
     private LocalDate dateInitial;
-
     private LocalDate dateFinal;
 
     private Double value;
