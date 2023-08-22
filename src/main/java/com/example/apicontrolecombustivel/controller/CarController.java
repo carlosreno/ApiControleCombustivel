@@ -2,7 +2,6 @@ package com.example.apicontrolecombustivel.controller;
 
 import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.CarDto;
-import com.example.apicontrolecombustivel.model.jpa.CarDto;
 import com.example.apicontrolecombustivel.model.jpa.Car;
 import com.example.apicontrolecombustivel.service.CarService;
 import jakarta.validation.Valid;
