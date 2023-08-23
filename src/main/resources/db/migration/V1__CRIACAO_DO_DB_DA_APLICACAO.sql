@@ -37,7 +37,6 @@ CREATE TABLE IF NOT EXISTS cars (
                                     renavam VARCHAR(11) NOT NULL,
                                     placa VARCHAR(100) NOT NULL,
                                     brand VARCHAR(50),
-                                    year INT,
                                     color VARCHAR(30),
                                     mileage DOUBLE,
                                     fabrication_date DATE,

@@ -1,11 +1,13 @@
 package com.example.apicontrolecombustivel.dto.model;
 
 import com.example.apicontrolecombustivel.enums.ContractStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,16 +20,16 @@ public record ContractDetailsDto(
         @NotBlank
         String object,
         @NotNull
-        @DateTimeFormat(pattern = "dd-MM-yyyy")
+        @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate dateInitial,
         @NotNull
-        @DateTimeFormat(pattern = "dd-MM-yyyy")
+        @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate dateFinal,
         @NotNull
         Double value,
         @Enumerated(EnumType.STRING)
         ContractStatus status,
-        @Max(value = 2000)
+        @Size(min =0,max = 2000)
         String comments,
         @NotNull
         Long customerId,

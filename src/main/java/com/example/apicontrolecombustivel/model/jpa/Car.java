@@ -1,12 +1,15 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
+import com.example.apicontrolecombustivel.dto.projectionsDto.AvailabilityResponse;
 import com.example.apicontrolecombustivel.enums.OnOrOf;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -29,9 +32,6 @@ public class Car {
     private TypeVehicles typeVehicles;
 
     private String brand;
-
-    private Integer year;
-
     private String color;
     @OneToMany
     @JoinTable(
@@ -43,7 +43,7 @@ public class Car {
 
     private Double mileage;
 
-    private Date fabricationDate;
+    private LocalDate fabricationDate;
 
     @Column(length = 2000)
     private String comments;
@@ -52,9 +52,8 @@ public class Car {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToOne
-    @JoinColumn(name = "active_availability_id")
-    private Availability activeAvailability;
+    @Transient
+    private AvailabilityResponse activeAvailability;
 
     @Enumerated(EnumType.STRING)
     private OnOrOf status;

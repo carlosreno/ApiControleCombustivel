@@ -3,11 +3,17 @@ package com.example.apicontrolecombustivel.model.jpa;
 import com.example.apicontrolecombustivel.enums.OnOrOf;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "availability")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Availability {
 
     @Id
