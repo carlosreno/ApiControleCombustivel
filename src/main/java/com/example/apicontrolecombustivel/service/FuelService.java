@@ -1,14 +1,13 @@
 package com.example.apicontrolecombustivel.service;
 
 import com.example.apicontrolecombustivel.dto.MessageDto;
-import com.example.apicontrolecombustivel.model.jpa.Fuel;
-import com.example.apicontrolecombustivel.model.jpa.UserType;
+import com.example.apicontrolecombustivel.model.jpa.Fuels;
 
 import java.util.List;
 
 public interface FuelService {
-    Fuel create(Fuel dto);
-    List<Fuel> findAll();
+    Fuels create(Fuels dto);
+    List<Fuels> findAll();
     MessageDto delete(Long id);
-    Fuel findById(Long id);
-    Fuel put(Fuel dto);}
+    Fuels findById(Long id);
+    Fuels put(Fuels dto);}

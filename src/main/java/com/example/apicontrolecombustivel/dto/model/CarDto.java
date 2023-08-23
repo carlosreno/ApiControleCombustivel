@@ -1,29 +1,27 @@
 package com.example.apicontrolecombustivel.dto.model;
 
 import com.example.apicontrolecombustivel.enums.OnOrOf;
-import com.example.apicontrolecombustivel.model.jpa.Availability;
-import com.example.apicontrolecombustivel.model.jpa.Company;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
+import java.util.List;
 
 public record CarDto(
         @NotBlank
         String placa,
         String renavam,
         @NotBlank
-        String type,
-        String marca,
+        Long typeVehicles,
         String brand,
         Integer year,
         String color,
-        String fuel,
+        List<Long> fuelIds,
         Double mileage,
         Date fabricationDate,
         String comments,
         Long companyId,
-        Long activeAvailabilityId,
         @Enumerated(EnumType.STRING)
         OnOrOf status
 ) {

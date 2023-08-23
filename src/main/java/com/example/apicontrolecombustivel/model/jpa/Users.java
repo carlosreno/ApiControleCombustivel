@@ -31,7 +31,7 @@ public class Users {
     private UserType userType;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(
             name = "user_sector",
             joinColumns = @JoinColumn(name = "user_id"),

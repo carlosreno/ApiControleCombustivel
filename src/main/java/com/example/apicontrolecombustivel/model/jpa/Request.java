@@ -19,7 +19,7 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "fuels_contract")
-    private Fuel fuelsContract;
+    private Fuels fuelsContract;
 
     private Double fuelAmount;
 

@@ -3,7 +3,6 @@ package com.example.apicontrolecombustivel.service;
 import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.CompanyDto;
 import com.example.apicontrolecombustivel.model.jpa.Company;
-import com.example.apicontrolecombustivel.utils.MsgStandard;
 
 import java.util.List;
 

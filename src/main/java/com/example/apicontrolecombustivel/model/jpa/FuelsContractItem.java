@@ -25,7 +25,7 @@ public class FuelsContractItem {
     @ManyToOne
     @MapsId("fuelId")
     @JoinColumn(name = "fuel_id")
-    private Fuel fuel;
+    private Fuels fuels;
 
     @Column(name = "amount", nullable = false)
     private int amount;

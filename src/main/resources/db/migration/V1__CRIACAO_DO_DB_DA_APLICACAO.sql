@@ -36,11 +36,9 @@ CREATE TABLE IF NOT EXISTS cars (
                                     id INT AUTO_INCREMENT PRIMARY KEY,
                                     renavam VARCHAR(11) NOT NULL,
                                     placa VARCHAR(100) NOT NULL,
-                                    marca VARCHAR(50),
                                     brand VARCHAR(50),
                                     year INT,
                                     color VARCHAR(30),
-                                    fuel VARCHAR(30),
                                     mileage DOUBLE,
                                     fabrication_date DATE,
                                     type_vehicles_id INT NOT NULL ,
@@ -153,7 +151,13 @@ CREATE TABLE IF NOT EXISTS fueling (
                                        request_id INT,
                                        contract_id INT NOT NULL
 );
-
+CREATE TABLE IF NOT EXISTS cars_fuels (
+                                          car_id INT NOT NULL,
+                                          fuel_id INT NOT NULL,
+                                          PRIMARY KEY (car_id, fuel_id),
+                                          FOREIGN KEY (car_id) REFERENCES user(id),
+                                          FOREIGN KEY (fuel_id) REFERENCES sectors (id)
+);
 ALTER TABLE cars
     ADD CONSTRAINT fk_activate_availability_id
         FOREIGN KEY (active_availability_id) references availability(id),

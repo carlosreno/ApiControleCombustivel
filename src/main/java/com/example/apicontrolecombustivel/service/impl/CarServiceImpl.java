@@ -1,18 +1,12 @@
 package com.example.apicontrolecombustivel.service.impl;
 
 import com.example.apicontrolecombustivel.dto.MessageDto;
-import com.example.apicontrolecombustivel.dto.model.UserDto;
+import com.example.apicontrolecombustivel.dto.model.CarDto;
 import com.example.apicontrolecombustivel.exception.NotFoundException;
 import com.example.apicontrolecombustivel.mapper.UserMapper;
-import com.example.apicontrolecombustivel.model.jpa.Company;
-import com.example.apicontrolecombustivel.model.jpa.Sectors;
-import com.example.apicontrolecombustivel.model.jpa.UserType;
-import com.example.apicontrolecombustivel.model.jpa.Users;
-import com.example.apicontrolecombustivel.repositories.UserRepository;
-import com.example.apicontrolecombustivel.service.CompanyService;
-import com.example.apicontrolecombustivel.service.SectorService;
-import com.example.apicontrolecombustivel.service.UserService;
-import com.example.apicontrolecombustivel.service.UserTypeService;
+import com.example.apicontrolecombustivel.model.jpa.*;
+import com.example.apicontrolecombustivel.repositories.CarRepository;
+import com.example.apicontrolecombustivel.service.*;
 import com.example.apicontrolecombustivel.utils.MsgStandard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,67 +16,66 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class CarServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final SectorService sectorService;
+public class CarServiceImpl implements CarService {
+    private final CarRepository carRepository;
+    private final AvailabilityS availability;
     private final CompanyService companyService;
-    private final UserTypeService userTypeService;
+    private final VehiclesTypeService vehiclesTypeService;
 
     @Override
-    public Users create(UserDto dto) {
+    public Car create(CarDto dto) {
         Company company = getCompanyById(dto);
-        UserType userType = getTypeById(dto);
-        List<Sectors> sectors = getAllSectorsById(dto.sectorIds());
-        Users users = UserMapper.fromDtoToEntity(null,dto,sectors,userType,company);
-        return userRepository.save(users);
+        TypeVehicles typeVehicles = getTypeById(dto);
+        Car car = UserMapper.fromDtoToEntity(null,dto,sectors,userType,company);
+        return carRepository.save(users);
     }
 
     @Override
-    public List<Users> findAll() {
-        return userRepository.findAll();
+    public List<Car> findAll() {
+        return carRepository.findAll();
     }
 
     @Override
     public MessageDto delete(Long id) {
         returnIfExist(id);
-        userRepository.deleteById(id);
+        carRepository.deleteById(id);
         return MsgStandard.msgStandardOk("deleted");
     }
 
     @Override
-    public Users findById(Long id) {
+    public Car findById(Long id) {
         return returnIfExist(id);
     }
 
-    private Users returnIfExist(Long id) {
-       return userRepository.findById(id)
+    private Car returnIfExist(Long id) {
+       return carRepository.findById(id)
                 .orElseThrow(()->new NotFoundException("user with this id not exist"));
     }
 
     @Override
-    public Users put(Long id, UserDto dto) {
+    public Car put(Long id, CarDto dto) {
         returnIfExist(id);
         Company company = getCompanyById(dto);
-        UserType userType = getTypeById(dto);
+        TypeVehicles userType = getTypeById(dto);
         List<Sectors> sectors = getAllSectorsById(dto.sectorIds());
-        Users users = UserMapper.fromDtoToEntity(id,dto,sectors,userType,company);
-        return userRepository.save(users);
+        Car users = UserMapper.fromDtoToEntity(id,dto,sectors,userType,company);
+        return carRepository.save(users);
     }
 
     @Override
-    public Users patch(Long id, UserDto dto) {
-        Users usersDb = returnIfExist(id);
-        Users newDataUser = Users.builder()
+    public Car patch(Long id, CarDto dto) {
+        Car usersDb = returnIfExist(id);
+        Car newDataUser = Car.builder()
                 .id(id)
                 .name(dto.name() != null ? dto.name() : usersDb.getName())
-                .userType(dto.userTypeId() != null ? getTypeById(dto) : usersDb.getUserType())
+                .userType(dto.userTypeId() != null ? getTypeById(dto) : usersDb.getTypeVehicles())
                 .sectors(dto.sectorIds() != null ? getAllSectorsById(dto.sectorIds()) : usersDb.getSectors())
                 .company(dto.companyId() != null ? getCompanyById(dto) : usersDb.getCompany())
                 .build();
-        return userRepository.save(newDataUser);
+        return carRepository.save(newDataUser);
     }
 
-    private Company getCompanyById(UserDto dto) {
+    private Company getCompanyById(CarDto dto) {
         return companyService.findById(dto.companyId());
     }
 
@@ -90,7 +83,7 @@ public class CarServiceImpl implements UserService {
         return sectorService.findAllById(sectorIds);
     }
 
-    private UserType getTypeById(UserDto dto) {
-        return userTypeService.findById(dto.userTypeId());
+    private TypeVehicles getTypeById(CarDto dto) {
+        return vehiclesTypeService.findById(dto.userTypeId());
     }
 }

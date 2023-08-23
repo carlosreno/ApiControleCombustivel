@@ -1,18 +1,14 @@
 package com.example.apicontrolecombustivel.model.jpa;
 
 import com.example.apicontrolecombustivel.enums.OnOrOf;
-import com.example.apicontrolecombustivel.repositories.AvailabilityRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.data.jpa.provider.PersistenceProvider;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "cars")
@@ -32,15 +28,18 @@ public class Car {
     @JoinColumn(name = "type_vehicles_id")
     private TypeVehicles typeVehicles;
 
-    private String marca;
-
     private String brand;
 
     private Integer year;
 
     private String color;
-
-    private String fuel;
+    @OneToMany
+    @JoinTable(
+            name = "cars_fuels",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "fuel_id")
+    )
+    private List<Fuels> fuels;
 
     private Double mileage;
 
