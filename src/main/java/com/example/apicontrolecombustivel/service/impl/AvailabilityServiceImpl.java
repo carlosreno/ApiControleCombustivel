@@ -2,12 +2,11 @@ package com.example.apicontrolecombustivel.service.impl;
 
 import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.AvailabilityDto;
+import com.example.apicontrolecombustivel.dto.projectionsDto.AvailabilityResponse;
 import com.example.apicontrolecombustivel.exception.NotFoundException;
 import com.example.apicontrolecombustivel.mapper.AvailabilityMapper;
-import com.example.apicontrolecombustivel.mapper.UserMapper;
 import com.example.apicontrolecombustivel.model.jpa.Availability;
 import com.example.apicontrolecombustivel.model.jpa.Car;
-import com.example.apicontrolecombustivel.model.jpa.Company;
 import com.example.apicontrolecombustivel.model.jpa.Sectors;
 import com.example.apicontrolecombustivel.repositories.AvailabilityRepository;
 import com.example.apicontrolecombustivel.service.AvailabilityService;
@@ -35,8 +34,8 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
-    public List<Availability> findAll() {
-        return availabilityRepository.findAll();
+    public List<AvailabilityResponse> findAll() {
+        return availabilityRepository.findAllResponse();
     }
 
     @Override
@@ -49,6 +48,11 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Override
     public Availability findById(Long id) {
         return returnIfExist(id);
+    }
+
+    @Override
+    public List<AvailabilityResponse> findByCarId(Long id) {
+        return availabilityRepository.findByCarId(id);
     }
 
     private Availability returnIfExist(Long id) {

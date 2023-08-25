@@ -2,6 +2,7 @@ package com.example.apicontrolecombustivel.controller;
 
 import com.example.apicontrolecombustivel.dto.MessageDto;
 import com.example.apicontrolecombustivel.dto.model.AvailabilityDto;
+import com.example.apicontrolecombustivel.dto.projectionsDto.AvailabilityResponse;
 import com.example.apicontrolecombustivel.model.jpa.Availability;
 import com.example.apicontrolecombustivel.service.AvailabilityService;
 import jakarta.validation.Valid;
@@ -24,9 +25,14 @@ public class AvailabilityController {
                 .body(availabilityService.create(dto));
     }
     @GetMapping("/findAll")
-    public ResponseEntity<List<Availability>> findAll(){
+    public ResponseEntity<List<AvailabilityResponse>> findAll(){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(availabilityService.findAll());
+    }
+    @GetMapping("/findAllByCarId/{id}")
+    public ResponseEntity<List<AvailabilityResponse>>findAllByCarId(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(availabilityService.findByCarId(id));
     }
     @GetMapping("/findById/{id}")
     public ResponseEntity<Availability> findById(@PathVariable Long id){

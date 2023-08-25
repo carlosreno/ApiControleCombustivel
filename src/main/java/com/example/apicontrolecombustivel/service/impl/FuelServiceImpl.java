@@ -38,7 +38,7 @@ public class FuelServiceImpl implements FuelService {
     }
     private Fuels verifyIfExistTypeWithId(Long id) {
         return fuelRepository.findById(id).
-                orElseThrow(()->new NotFoundException("userType with this name not exist"));
+                orElseThrow(()->new NotFoundException("fuel with this id not exist"));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class FuelServiceImpl implements FuelService {
     private Boolean verifyIfNotExistTypeWithName(String name) {
         var optionalFuel = fuelRepository.findByName(name);
         if (optionalFuel.isPresent()){
-            throw new BusinessException("userType whit this name already exist");
+            throw new BusinessException("fuel whit this name already exist");
         }
         return true;
     }
